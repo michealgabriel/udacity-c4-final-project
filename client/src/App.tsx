@@ -88,18 +88,12 @@ export default class App extends Component<AppProps, AppState> {
 
     return (
       <Switch>
-        <Route
-          path="/"
-          exact
-          render={props => {
+        <Route path="/" exact render={props => {
             return <Todos {...props} auth={this.props.auth} />
           }}
         />
 
-        <Route
-          path="/todos/:todoId/edit"
-          exact
-          render={props => {
+        <Route path="/todos/:todoId/edit" exact render={props => {
             return <EditTodo {...props} auth={this.props.auth} />
           }}
         />

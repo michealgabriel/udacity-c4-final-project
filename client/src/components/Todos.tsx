@@ -51,12 +51,14 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
         name: this.state.newTodoName,
         dueDate
       })
+      // # !!!! ERROR OCCURS WITHIN HERE -> TODO: FIND OUT Y AND FIX 2MRW :) <3
       this.setState({
         todos: [...this.state.todos, newTodo],
         newTodoName: ''
       })
-    } catch {
-      alert('Todo creation failed')
+      // # !!!! ERROR OCCURS WITHIN HERE -> TODO: FIND OUT Y AND FIX 2MRW :) <3
+    } catch(ex) {
+      alert(`Todo creation failed: ${(ex as Error).message}`)
     }
   }
 

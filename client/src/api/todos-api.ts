@@ -3,6 +3,7 @@ import { Todo } from '../types/Todo';
 import { CreateTodoRequest } from '../types/CreateTodoRequest';
 import Axios from 'axios'
 import { UpdateTodoRequest } from '../types/UpdateTodoRequest';
+import { UpdateAttachmentRequest } from '../types/UpdateAttachmentRequest';
 
 export async function getTodos(idToken: string): Promise<Todo[]> {
   console.log('Fetching todos')
@@ -17,10 +18,7 @@ export async function getTodos(idToken: string): Promise<Todo[]> {
   return response.data.items
 }
 
-export async function createTodo(
-  idToken: string,
-  newTodo: CreateTodoRequest
-): Promise<Todo> {
+export async function createTodo(idToken: string, newTodo: CreateTodoRequest): Promise<Todo> {
   const response = await Axios.post(`${apiEndpoint}/todos`,  JSON.stringify(newTodo), {
     headers: {
       'Content-Type': 'application/json',
@@ -30,11 +28,7 @@ export async function createTodo(
   return response.data.item
 }
 
-export async function patchTodo(
-  idToken: string,
-  todoId: string,
-  updatedTodo: UpdateTodoRequest
-): Promise<void> {
+export async function patchTodo( idToken: string, todoId: string, updatedTodo: UpdateTodoRequest): Promise<void> {
   await Axios.patch(`${apiEndpoint}/todos/${todoId}`, JSON.stringify(updatedTodo), {
     headers: {
       'Content-Type': 'application/json',
@@ -43,10 +37,7 @@ export async function patchTodo(
   })
 }
 
-export async function deleteTodo(
-  idToken: string,
-  todoId: string
-): Promise<void> {
+export async function deleteTodo(idToken: string, todoId: string): Promise<void> {
   await Axios.delete(`${apiEndpoint}/todos/${todoId}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -55,10 +46,7 @@ export async function deleteTodo(
   })
 }
 
-export async function getUploadUrl(
-  idToken: string,
-  todoId: string
-): Promise<string> {
+export async function getUploadUrl( idToken: string, todoId: string): Promise<string> {
   const response = await Axios.post(`${apiEndpoint}/todos/${todoId}/attachment`, '', {
     headers: {
       'Content-Type': 'application/json',
@@ -71,3 +59,13 @@ export async function getUploadUrl(
 export async function uploadFile(uploadUrl: string, file: Buffer): Promise<void> {
   await Axios.put(uploadUrl, file)
 }
+
+export async function updateAttachment( updatedAttachment: UpdateAttachmentRequest, idToken: string, todoId: string): Promise<void> {
+  await Axios.patch(`${apiEndpoint}/todos/${todoId}/attachment`, JSON.stringify(updatedAttachment), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${idToken}`
+    }
+  })
+}
+
