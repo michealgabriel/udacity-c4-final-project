@@ -4,7 +4,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 
-import { getTodosForUser as getTodosForUser } from '../../helpers/todos'
+import { getTodosForUser as getTodosForUser } from '../../businessLogic/todos'
 import { getUserId } from '../utils';
 import { createLogger } from 'src/utils/logger'
 
@@ -21,7 +21,6 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
     const userId: string = getUserId(event);
     const todos = await getTodosForUser(userId);
 
-
     return {
       statusCode: 200,
       headers: {
@@ -31,7 +30,6 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
           items: todos
       }),
     }
-
 })
 
 handler.use(

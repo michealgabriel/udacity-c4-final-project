@@ -45,20 +45,22 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
   }
 
   onTodoCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
-    try {
-      const dueDate = this.calculateDueDate()
-      const newTodo = await createTodo(this.props.auth.getIdToken(), {
-        name: this.state.newTodoName,
-        dueDate
-      })
-      // # !!!! ERROR OCCURS WITHIN HERE -> TODO: FIND OUT Y AND FIX 2MRW :) <3
-      this.setState({
-        todos: [...this.state.todos, newTodo],
-        newTodoName: ''
-      })
-      // # !!!! ERROR OCCURS WITHIN HERE -> TODO: FIND OUT Y AND FIX 2MRW :) <3
-    } catch(ex) {
-      alert(`Todo creation failed: ${(ex as Error).message}`)
+    if(this.state.newTodoName.trim().length === 0){
+      alert("Empty Field")
+    }else{
+      try {
+        const dueDate = this.calculateDueDate()
+        const newTodo = await createTodo(this.props.auth.getIdToken(), {
+          name: this.state.newTodoName,
+          dueDate
+        })
+        this.setState({
+          todos: [...this.state.todos, newTodo],
+          newTodoName: ''
+        })
+      } catch(ex) {
+        alert(`Todo creation failed: ${(ex as Error).message}`)
+      }
     }
   }
 
@@ -98,6 +100,8 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
         todos,
         loadingTodos: false
       })
+      console.log(todos);
+      
     } catch (e) {
       alert(`Failed to fetch todos: ${(e as Error).message}`)
     }
@@ -195,7 +199,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
                 </Button>
               </Grid.Column>
               {todo.attachmentUrl && (
-                <Image src={todo.attachmentUrl} size="small" wrapped />
+                <Image src={todo.attachmentUrl} key={todo.attachmentUrl + new Date()} size="small" wrapped />
               )}
               <Grid.Column width={16}>
                 <Divider />
